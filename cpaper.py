@@ -1,4 +1,6 @@
 import random
+from datetime import datetime
+
 import streamlit as st
 import pandas as pd
 from streamlit_option_menu import option_menu
@@ -350,8 +352,8 @@ def check_page():
                 # connection_info.insert(st.session_state.user_info)
                 st.write("成功提交！")
                 progress_text = " 当前数据进度 100 % "
+                datetime.sleep(1)
                 my_bar.progress(100, text=progress_text)
-                st.session_state.submit_disabled = True  # 点击后禁用提交按钮
                 # for key in list(st.session_state.keys()):
                 #     del st.session_state[key]
                 # st.session_state.refresh += 1
