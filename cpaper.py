@@ -362,7 +362,7 @@ def check_page():
 # 设置网页标题
 st.set_page_config(page_title="IDKE-CPLLM", page_icon="👨‍💻")
 
-user_name = 'yzx'
+user_name = 'nys'
 connection_timu = st.connection( "mongodb",collection="gpt_data",type=MongoDBConnection)
 connection_score = st.connection( "mongodb",collection="check_callbacks",type=MongoDBConnection)
 connection_info = st.connection( "mongodb",collection="user_infos",type=MongoDBConnection)
