@@ -238,21 +238,21 @@ def check_page():
         st.session_state.timu = None
 
     with st.expander('**用户名**'):
-    # 设置用户名称（只在首次初始化时设置）
-    #if 'user_name' not in st.session_state.user_info:
-    #    st.session_state.user_info['user_name'] = user_name
-    # 初始化 session_state 中的变量
-    if "user_info" not in st.session_state:
-        st.session_state.user_info = {}  # 存储用户评分信息
-    if "user_name" not in st.session_state:
-        st.session_state.user_name = ""  # 初始化用户名
+        # 设置用户名称（只在首次初始化时设置）
+        #if 'user_name' not in st.session_state.user_info:
+        #    st.session_state.user_info['user_name'] = user_name
+        # 初始化 session_state 中的变量
+        if "user_info" not in st.session_state:
+            st.session_state.user_info = {}  # 存储用户评分信息
+        if "user_name" not in st.session_state:
+            st.session_state.user_name = ""  # 初始化用户名
 
-    # 添加用户名输入框
-    st.text_input("请输入您的用户名", key="user_name_input", value=st.session_state.user_name)
-    st.session_state.user_name = st.session_state.user_name_input  # 更新用户名到 session_state
+        # 添加用户名输入框
+        st.text_input("请输入您的用户名", key="user_name_input", value=st.session_state.user_name)
+        st.session_state.user_name = st.session_state.user_name_input  # 更新用户名到 session_state
 
-    # 将用户名添加到 user_info 中
-    st.session_state.user_info['user_name'] = st.session_state.user_name
+        # 将用户名添加到 user_info 中
+        st.session_state.user_info['user_name'] = st.session_state.user_name
 
     # 1️⃣ 题目部分
     with st.expander('**1️⃣题目**'):
