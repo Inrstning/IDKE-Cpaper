@@ -1,4 +1,5 @@
 import random
+import time
 from datetime import datetime
 
 import streamlit as st
@@ -352,7 +353,7 @@ def check_page():
                 # connection_info.insert(st.session_state.user_info)
                 st.write("成功提交！")
                 progress_text = " 当前数据进度 100 % "
-                datetime.sleep(1)
+                time.sleep(1)
                 my_bar.progress(100, text=progress_text)
                 # for key in list(st.session_state.keys()):
                 #     del st.session_state[key]
