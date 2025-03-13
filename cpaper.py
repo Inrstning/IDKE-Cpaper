@@ -213,155 +213,147 @@ def chat_page():
 
 @st.fragment
 def check_page():
-        # 初始化进度条和文本
-        progress_text = " 当前数据进度 0.0 % "
-        my_bar = st.progress(0, text=progress_text)
+    # 初始化进度条和文本
+    progress_text = " 当前数据进度 0.0 % "
+    my_bar = st.progress(0, text=progress_text)
 
-        # 初始化 session_state
-        if "progeress" not in st.session_state:
-            st.session_state.progeress = True  # 控制 2️⃣部分按钮禁用
-        if "progeress2" not in st.session_state:
-            st.session_state.progeress2 = True  # 控制 2️⃣部分按钮禁用
-        if "feedback_col1" not in st.session_state:
-            st.session_state.feedback_col1 = True  # 控制 3️⃣部分第1列禁用
-        if "feedback_col2" not in st.session_state:
-            st.session_state.feedback_col2 = True  # 控制 3️⃣部分第2列禁用
-        if "feedback_col3" not in st.session_state:
-            st.session_state.feedback_col3 = True  # 控制 3️⃣部分第3列禁用
-        if "submit_disabled" not in st.session_state:
-            st.session_state.submit_disabled = True  # 控制提交按钮禁用
-
-        # 初始化用户打分信息
-        st.session_state.user_info = {}
+    # 初始化 session_state，确保不覆盖已有数据
+    if "progeress" not in st.session_state:
+        st.session_state.progeress = True  # 控制 2️⃣部分按钮禁用
+    if "progeress2" not in st.session_state:
+        st.session_state.progeress2 = True  # 控制 2️⃣部分按钮禁用
+    if "feedback_col1" not in st.session_state:
+        st.session_state.feedback_col1 = True  # 控制 3️⃣部分第1列禁用
+    if "feedback_col2" not in st.session_state:
+        st.session_state.feedback_col2 = True  # 控制 3️⃣部分第2列禁用
+    if "feedback_col3" not in st.session_state:
+        st.session_state.feedback_col3 = True  # 控制 3️⃣部分第3列禁用
+    if "submit_disabled" not in st.session_state:
+        st.session_state.submit_disabled = True  # 控制提交按钮禁用
+    if "user_info" not in st.session_state:
+        st.session_state.user_info = {}  # 初始化用户评分信息
+    if "count" not in st.session_state:
         st.session_state.count = 0
-        # st.session_state.refresh_state=0
+    if "timu" not in st.session_state:
+        st.session_state.timu = None
+
+    # 设置用户名称（只在首次初始化时设置）
+    if 'user_name' not in st.session_state.user_info:
         st.session_state.user_info['user_name'] = user_name
 
-        # 1️⃣ 题目部分
-        with st.expander('**1️⃣题目**'):
-            # new_ti = connection_timu.aggregate([{'$sample':{'size': 1}}])
-            if st.session_state.timu == None:
-                st.session_state.timu = return_random_data(connection_timu,user_name=user_name)
-            
-            st.session_state.user_info['question_id'] = str(st.session_state.timu['_id'])
-            print(str(st.session_state.timu['_id']))
-            st.markdown(st.session_state.timu['question'])
-            left, right = st.columns(2)
+    # 1️⃣ 题目部分
+    with st.expander('**1️⃣题目**'):
+        if st.session_state.timu is None:
+            st.session_state.timu = return_random_data(connection_timu, user_name=user_name)
 
-            if left.button("题目错误", icon="☹️", use_container_width=True):
-                st.session_state.user_info['question_correct'] = 0
-                left.markdown("题目是错误的.")
-                progress_text = " 当前数据进度 33.0 % "
-                my_bar.progress(33, text=progress_text)
-                st.session_state.progeress = False
-                st.session_state.progeress2 = False  # 启用 2️⃣部分按钮
+        st.session_state.user_info['question_id'] = str(st.session_state.timu['_id'])
+        print(str(st.session_state.timu['_id']))
+        st.markdown(st.session_state.timu['question'])
+        left, right = st.columns(2)
 
-            if right.button("题目正确", icon="😃", use_container_width=True):
-                st.session_state.user_info['question_correct'] = 1
-                right.markdown("题目是正确的.")
-                progress_text = " 当前数据进度 33.0 % "
-                my_bar.progress(33, text=progress_text)
-                st.session_state.progeress = False
-                st.session_state.progeress2 = False  # 启用 2️⃣部分按钮
+        if left.button("题目错误", icon="☹️", use_container_width=True):
+            st.session_state.user_info['question_correct'] = 0
+            left.markdown("题目是错误的.")
+            progress_text = " 当前数据进度 33.0 % "
+            my_bar.progress(33, text=progress_text)
+            st.session_state.progeress = False
+            st.session_state.progeress2 = False  # 启用 2️⃣部分按钮
 
-        # ⏸️ 思考过程
-        with st.expander('**⏸️思考过程**'):
-            cot = st.session_state.timu['messages']['asistant']
-            st.markdown(cot)
+        if right.button("题目正确", icon="😃", use_container_width=True):
+            st.session_state.user_info['question_correct'] = 1
+            right.markdown("题目是正确的.")
+            progress_text = " 当前数据进度 33.0 % "
+            my_bar.progress(33, text=progress_text)
+            st.session_state.progeress = False
+            st.session_state.progeress2 = False  # 启用 2️⃣部分按钮
 
-        # 2️⃣ 答案是否正确部分
-        with st.expander('**2️⃣答案是否正确**'):
-            
-            st.markdown(st.session_state.timu['answer'])
-            left1, right1 = st.columns(2)
+    # ⏸️ 思考过程
+    with st.expander('**⏸️思考过程**'):
+        cot = st.session_state.timu['messages']['asistant']
+        st.markdown(cot)
 
-            if left1.button("答案错误", icon="☹️", use_container_width=True, key="button_wrong",
-                            disabled=st.session_state.progeress):
-                st.session_state.user_info['answer_correct'] = 0
-                left1.markdown("答案是错误的.")
-                progress_text = " 当前数据进度 66.7 % "
-                my_bar.progress(67, text=progress_text)
-                st.session_state.feedback_col1 = False  # 启用 3️⃣部分第1列
-                st.session_state.feedback_col2 = False  # 启用 3️⃣部分第2列
-                st.session_state.feedback_col3 = False  # 启用 3️⃣部分第3列
+    # 2️⃣ 答案是否正确部分
+    with st.expander('**2️⃣答案是否正确**'):
+        st.markdown(st.session_state.timu['answer'])
+        left1, right1 = st.columns(2)
 
-            if right1.button("答案正确", icon="😃", use_container_width=True, key="button_right",
-                             disabled=st.session_state.progeress2):
-                st.session_state.user_info['answer_correct'] = 1
-                right1.markdown("答案是正确的.")
-                progress_text = " 当前数据进度 66.7 % "
-                my_bar.progress(67, text=progress_text)
-                st.session_state.feedback_col1 = False  # 启用 3️⃣部分第1列
-                st.session_state.feedback_col2 = False  # 启用 3️⃣部分第2列
-                st.session_state.feedback_col3 = False  # 启用 3️⃣部分第3列
+        if left1.button("答案错误", icon="☹️", use_container_width=True, key="button_wrong",
+                        disabled=st.session_state.progeress):
+            st.session_state.user_info['answer_correct'] = 0
+            left1.markdown("答案是错误的.")
+            progress_text = " 当前数据进度 66.7 % "
+            my_bar.progress(67, text=progress_text)
+            st.session_state.feedback_col1 = False  # 启用 3️⃣部分第1列
+            st.session_state.feedback_col2 = False  # 启用 3️⃣部分第2列
+            st.session_state.feedback_col3 = False  # 启用 3️⃣部分第3列
 
-        # 3️⃣ 如何评价当前这个题目部分
-        with st.expander('**3️⃣如何评价当前这个题目**'):
-            col1, col2, col3 = st.columns(3)
+        if right1.button("答案正确", icon="😃", use_container_width=True, key="button_right",
+                         disabled=st.session_state.progeress2):
+            st.session_state.user_info['answer_correct'] = 1
+            right1.markdown("答案是正确的.")
+            progress_text = " 当前数据进度 66.7 % "
+            my_bar.progress(67, text=progress_text)
+            st.session_state.feedback_col1 = False  # 启用 3️⃣部分第1列
+            st.session_state.feedback_col2 = False  # 启用 3️⃣部分第2列
+            st.session_state.feedback_col3 = False  # 启用 3️⃣部分第3列
 
-            # 第一列
-            with col1:
-                st.markdown("问题真实性")
-                sentiment_mapping = ["一", "二", "三", "四", "五"]
-                selected = st.feedback("stars", key="feedback_1", disabled=st.session_state.feedback_col1)
-                if selected is None:
-                    st.markdown(f"你选择了 零 星.")
-                if selected is not None:
-                    st.session_state.user_info['question_reality'] = selected+1
-                    st.markdown(f"你选择了 {sentiment_mapping[selected]} 星.")
-                    #st.session_state.feedback_col1 = True  # 点击后禁用第1列
-                    progress_text = " 当前数据进度 66.7 % "
-                    my_bar.progress(67, text=progress_text)
+    # 3️⃣ 如何评价当前这个题目部分
+    with st.expander('**3️⃣如何评价当前这个题目**'):
+        col1, col2, col3 = st.columns(3)
 
-            # 第二列
-            with col2:
-                st.markdown("规划合理性")
-                sentiment_mapping = ["一", "二", "三", "四", "五"]
-                selected2 = st.feedback("stars", key="feedback_2", disabled=st.session_state.feedback_col2)
-                if selected2 is None:
-                    st.markdown(f"你选择了 零 星.")
-                if selected2 is not None:
-                    st.session_state.user_info['cot_ablity'] = selected2+1
-                    st.markdown(f"你选择了 {sentiment_mapping[selected2]} 星.")
-                    #st.session_state.feedback_col2 = True  # 点击后禁用第2列
-                    progress_text = " 当前数据进度 66.7 % "
-                    my_bar.progress(67, text=progress_text)
+        # 第一列
+        with col1:
+            st.markdown("问题真实性")
+            sentiment_mapping = ["一", "二", "三", "四", "五"]
+            selected = st.feedback("stars", key="feedback_1", disabled=st.session_state.feedback_col1)
+            if selected is not None:
+                st.session_state.user_info['question_reality'] = selected + 1
+                st.markdown(f"你选择了 {sentiment_mapping[selected]} 星.")
 
-            # 第三列
-            with col3:
-                st.markdown("答案正确性")
-                sentiment_mapping = ["一", "二", "三", "四", "五"]
-                selected3 = st.feedback("stars", key="feedback_3", disabled=st.session_state.feedback_col3)
-                if selected3 is None:
-                    st.session_state.user_info['cot_ablity'] = 0
-                    st.markdown(f"你选择了 零 星.")
-                if selected3 is not None:
-                    st.session_state.user_info['answer_correct_ability'] = selected3+1
-                    st.markdown(f"你选择了 {sentiment_mapping[selected3]} 星.")
-                    #st.session_state.feedback_col3 = True  # 点击后禁用第3列
-                    progress_text = " 当前数据进度 66.7 % "
-                    my_bar.progress(67, text=progress_text)
+        # 第二列
+        with col2:
+            st.markdown("规划合理性")
+            selected2 = st.feedback("stars", key="feedback_2", disabled=st.session_state.feedback_col2)
+            if selected2 is not None:
+                st.session_state.user_info['cot_ablity'] = selected2 + 1
+                st.markdown(f"你选择了 {sentiment_mapping[selected2]} 星.")
 
-            # 提交按钮
-            if not st.session_state.feedback_col1 and not st.session_state.feedback_col2 and not st.session_state.feedback_col3:
-                st.session_state.submit_disabled = False  # 三个都被点击后解锁提交按钮
+        # 第三列
+        with col3:
+            st.markdown("答案正确性")
+            selected3 = st.feedback("stars", key="feedback_3", disabled=st.session_state.feedback_col3)
+            if selected3 is not None:
+                st.session_state.user_info['answer_correct_ability'] = selected3 + 1
+                st.markdown(f"你选择了 {sentiment_mapping[selected3]} 星.")
 
-            if st.button("保存并提交", type="primary", use_container_width=True,disabled=st.session_state.submit_disabled):
-                # print(st.session_state.user_info)
-                insert_user_score_info(connection_score,st.session_state.user_info)
-                update_user_infos(connection_info,st.session_state.user_info)
-                # connection_info.insert(st.session_state.user_info)
-                st.write("成功提交！")
-                progress_text = " 当前数据进度 100 % "
-                my_bar.progress(100, text=progress_text)
-                # for key in list(st.session_state.keys()):
-                #     del st.session_state[key]
-                # st.session_state.refresh += 1
-            
-                # st.session_state.refresh_state=1
-                st.session_state.timu = return_random_data(connection_timu,user_name=user_name)
-                # # print(1)
-                st.rerun()
+        # 检查是否所有反馈都已选择，控制提交按钮
+        if ('question_reality' in st.session_state.user_info and
+                'cot_ablity' in st.session_state.user_info and
+                'answer_correct_ability' in st.session_state.user_info):
+            st.session_state.submit_disabled = False
+        else:
+            st.session_state.submit_disabled = True
+
+        # 提交按钮
+        if st.button("保存并提交", type="primary", use_container_width=True, disabled=st.session_state.submit_disabled):
+            # 插入数据并更新信息
+            insert_user_score_info(connection_score, st.session_state.user_info)
+            update_user_infos(connection_info, st.session_state.user_info)
+            st.write("成功提交！")
+            progress_text = " 当前数据进度 100 % "
+            my_bar.progress(100, text=progress_text)
+
+            # 重置状态以开始新评分
+            st.session_state.progeress = True
+            st.session_state.progeress2 = True
+            st.session_state.feedback_col1 = True
+            st.session_state.feedback_col2 = True
+            st.session_state.feedback_col3 = True
+            st.session_state.submit_disabled = True
+            st.session_state.user_info = {'user_name': user_name}  # 保留用户名
+            st.session_state.timu = return_random_data(connection_timu, user_name=user_name)
+            st.rerun()
+
 
 # 设置网页标题
 st.set_page_config(page_title="IDKE-CPLLM", page_icon="👨‍💻")
