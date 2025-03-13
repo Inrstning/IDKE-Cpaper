@@ -306,7 +306,7 @@ def check_page():
                 if selected is not None:
                     st.session_state.user_info['question_reality'] = selected+1
                     st.markdown(f"你选择了 {sentiment_mapping[selected]} 星.")
-                    st.session_state.feedback_col1 = True  # 点击后禁用第1列
+                    #st.session_state.feedback_col1 = True  # 点击后禁用第1列
                     progress_text = " 当前数据进度 66.7 % "
                     my_bar.progress(67, text=progress_text)
 
@@ -320,7 +320,7 @@ def check_page():
                 if selected2 is not None:
                     st.session_state.user_info['cot_ablity'] = selected2+1
                     st.markdown(f"你选择了 {sentiment_mapping[selected2]} 星.")
-                    st.session_state.feedback_col2 = True  # 点击后禁用第2列
+                    #st.session_state.feedback_col2 = True  # 点击后禁用第2列
                     progress_text = " 当前数据进度 66.7 % "
                     my_bar.progress(67, text=progress_text)
 
@@ -335,7 +335,7 @@ def check_page():
                 if selected3 is not None:
                     st.session_state.user_info['answer_correct_ability'] = selected3+1
                     st.markdown(f"你选择了 {sentiment_mapping[selected3]} 星.")
-                    st.session_state.feedback_col3 = True  # 点击后禁用第3列
+                    #st.session_state.feedback_col3 = True  # 点击后禁用第3列
                     progress_text = " 当前数据进度 66.7 % "
                     my_bar.progress(67, text=progress_text)
 
@@ -359,6 +359,7 @@ def check_page():
                 st.session_state.timu = return_random_data(connection_timu,user_name=user_name)
                 # # print(1)
                 st.rerun()
+
 # 设置网页标题
 st.set_page_config(page_title="IDKE-CPLLM", page_icon="👨‍💻")
 
