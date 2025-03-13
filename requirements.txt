@@ -1,0 +1,4 @@
+pandas
+streamlit-option-menu
+python-docx
+openpyxl
