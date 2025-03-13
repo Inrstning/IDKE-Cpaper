@@ -2,3 +2,5 @@ pandas
 streamlit-option-menu
 python-docx
 openpyxl
+st mongo connection
+pymongo
