@@ -325,7 +325,7 @@ def check_page():
 
         # 第二列
         with col2:
-            st.markdown("规划合理性")
+            st.markdown("思考过程合理性")
             selected2 = st.feedback("stars", key="feedback_2", disabled=st.session_state.feedback_col2)
             if selected2 is not None:
                 st.session_state.user_info['cot_ablity'] = selected2 + 1
