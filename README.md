@@ -14,3 +14,4 @@ pip install -r requirements.txt
 streamlit run cpaper.py --server.enableXsrfProtection=false
 ```
 
+https://idke-cpaper3.streamlit.app/
